@@ -52,24 +52,38 @@ vi.mock('@itsjust/core', () => ({
   }),
 }));
 
-vi.mock('@/tool', () => ({
+vi.mock('@/tool/tool.config', () => ({
   toolConfig: {
-    id: 'simple-notepad',
-    name: 'Notepad',
+    id: '1795208681',
+    name: 'Timestamp Converter',
     version: '1.0.0',
+    description: 'Convert Unix timestamps.',
+    exportFormats: [],
     features: { sidebar: true },
-    theme: { brand: 'Notepad' },
   },
   templateBaseVersion: '1.1.0',
-  ToolCanvas: ({ text }: { text: string }) => <div>canvas:{text}</div>,
-  ToolToolbar: () => <div>toolbar</div>,
-  ToolSidebar: ({ text }: { text: string }) => <div>sidebar:{text}</div>,
+}));
+
+vi.mock('lz-string', () => ({
+  compressToEncodedURIComponent: (s: string) => s,
+  decompressFromEncodedURIComponent: (s: string) => s,
 }));
 
 vi.mock('@/tool/notepad-state', () => ({
-  notepadTool: {
+  shellTool: {
     serialize: (state: unknown) => JSON.stringify(state),
-    deserialize: () => ({ success: true, data: { content: 'From Shared Url', title: '' } }),
+    deserialize: () => ({
+      success: true,
+      data: {
+        mode: 'timestamp-to-date',
+        timestampInput: 'From Shared Url',
+        dateInput: '',
+        timezone: 'UTC',
+        liveNow: false,
+        output: '',
+        error: null,
+      },
+    }),
   },
 }));
 
@@ -96,7 +110,7 @@ describe('app client and help page', () => {
   it('handles share flow in tool client', async () => {
     render(<ToolClient />);
 
-    expect(screen.getByText('toolbar')).toBeInTheDocument();
+    expect(screen.getByTestId('preset-buttons')).toBeInTheDocument();
     fireEvent.click(screen.getByText('trigger-share'));
 
     expect(mockToast).toHaveBeenCalled();

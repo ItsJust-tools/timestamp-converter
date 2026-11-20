@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { generateJsonLd, generateToolMetadata } from '@/lib/seo';
 import toolConfig from '@/tool/tool.config';
 import { getPublicSiteUrl, templateMetadata } from '@/tool/template-metadata';
-import { notepadTool } from '@/tool/notepad-state';
+import { shellTool } from '@/tool/notepad-state';
 import { ToolCanvas } from '@/tool/components/tool-canvas';
 import { ToolSidebar } from '@/tool/components/tool-sidebar';
 import { ToolToolbar } from '@/tool/components/tool-toolbar';
@@ -92,20 +92,36 @@ describe('app and seo', () => {
   it('covers tool definition and helper exports', async () => {
     expect(cn('a', undefined, 'b', false, null, 'c')).toBe('a b c');
     expect(getPublicSiteUrl()).toBe('http://localhost:3000');
-    expect(notepadTool.deserialize({ content: 'x' })).toEqual({
+    expect(shellTool.deserialize({ mode: 'timestamp-to-date', timestampInput: 'x', dateInput: '' })).toEqual({
       success: true,
-      data: { content: 'x', title: '' },
+      data: {
+        mode: 'timestamp-to-date',
+        timestampInput: 'x',
+        dateInput: '',
+        timezone: 'UTC',
+        liveNow: false,
+        output: '',
+        error: null,
+      },
     });
-    expect(notepadTool.deserialize({ nope: true })).toEqual({
+    expect(shellTool.deserialize({ nope: true })).toEqual({
       success: false,
-      error: 'Invalid data format: expected { content: string, title?: string }',
+      error: 'Invalid data format: expected { mode, timestampInput, dateInput, ... }',
     });
-    expect(notepadTool.serialize({ content: 'x' })).toContain('"content": "x"');
-    expect(notepadTool.deserialize({ content: 'x', title: 'My Note' })).toEqual({
+    expect(shellTool.serialize({ ...shellTool.initialState, timestampInput: 'x' })).toContain('"timestampInput":"x"');
+    expect(shellTool.deserialize({ mode: 'date-to-timestamp', timestampInput: '1', dateInput: '2024-01-01 10:00' })).toEqual({
       success: true,
-      data: { content: 'x', title: 'My Note' },
+      data: {
+        mode: 'date-to-timestamp',
+        timestampInput: '1',
+        dateInput: '2024-01-01 10:00',
+        timezone: 'UTC',
+        liveNow: false,
+        output: '',
+        error: null,
+      },
     });
-    const exporters = (notepadTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
+    const exporters = (shellTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
     expect(exporters).toHaveLength(4);
     const first = exporters[0];
     expect(first).toBeDefined();

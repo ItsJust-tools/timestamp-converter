@@ -1,37 +1,24 @@
-import type { ToolConfig } from '@itsjust/core';
-import packageJson from '../../package.json';
+import type { ToolConfig, FeatureFlags } from '@itsjust/core';
 
-export const templateBaseVersion = packageJson.version;
+const features: FeatureFlags = {
+  export: true,
+  autoSave: true,
+  undoRedo: true,
+  sidebar: true,
+  statusBar: true,
+  darkMode: true,
+};
 
-const toolConfig = {
-  id: 'simple-notepad',
-  name: 'Notepad',
-  description: 'A clean, distraction-free notepad. Write, edit, and export your notes instantly.',
-  version: '1.3.0',
-  exportFormats: ['json', 'png', 'jpeg', 'webp', 'pdf'],
-  features: {
-    export: true,
-    autoSave: true,
-    undoRedo: true,
-    sidebar: true,
-    statusBar: true,
-    darkMode: true,
-  },
-  theme: {
-    accent: '#10b981',
-    accentHover: '#059669',
-    accentSubtle: 'rgba(16, 185, 129, 0.08)',
-    brand: 'Notepad',
-    icon: '\u{1F4DF}',
-  },
-  shortcuts: [
-    {
-      title: 'Notepad',
-      shortcuts: [
-        { keys: 'Ctrl+Shift+E', label: 'Export All', description: 'exports all formats at once' },
-      ],
-    },
-  ],
-} satisfies ToolConfig;
+export const toolConfig: ToolConfig = {
+  id: '1795208681',
+  name: 'Timestamp Converter',
+  category: 'Utility',
+  version: '1.0.0',
+  description:
+    'Convert Unix timestamps to human-readable dates and back, with timezone selection and live ticking.',
+  exportFormats: ['png', 'pdf', 'json', 'jpeg', 'webp'],
+  features,
+} as ToolConfig;
 
+export const templateBaseVersion = '1.1.0';
 export default toolConfig;
