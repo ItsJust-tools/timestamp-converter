@@ -11,7 +11,13 @@ export function TimestampConverterApp() {
   const [state, setState] = React.useState<ToolState>(timestampTool.initialState);
 
   const handleClear = useCallback(() => {
-    setState({ ...timestampTool.initialState, timestampInput: '', dateInput: '', output: '', error: null });
+    setState({
+      ...timestampTool.initialState,
+      timestampInput: '',
+      dateInput: '',
+      output: '',
+      error: null,
+    });
   }, []);
 
   return (

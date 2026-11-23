@@ -90,7 +90,9 @@ describe('date to timestamp conversion', () => {
     expect(toTs.ok).toBe(true);
     if (!toTs.ok) return;
     const back = convert({ ...base, timestampInput: String(toTs.value) });
-    expect(back.output.startsWith(input.startsWith('2024-06-15') ? '2024-06-15 12:30:00' : '')).toBe(true);
+    expect(
+      back.output.startsWith(input.startsWith('2024-06-15') ? '2024-06-15 12:30:00' : '')
+    ).toBe(true);
   });
 
   it('converts a local-time date using the local zone', () => {
@@ -140,7 +142,10 @@ describe('relative formatting', () => {
   });
 
   it('shows the relative label alongside the timestamp in date-to-timestamp mode', () => {
-    const result = convert({ ...base, mode: 'date-to-timestamp', dateInput: '2000-01-01 00:00' }, now);
+    const result = convert(
+      { ...base, mode: 'date-to-timestamp', dateInput: '2000-01-01 00:00' },
+      now
+    );
     expect(result.output).toContain(`${Y2K_SECONDS} s`);
     expect(result.output).toContain('ago');
   });
@@ -170,7 +175,9 @@ describe('validation', () => {
     expect(parseDateInput('junk', 'UTC').ok).toBe(false);
     expect(parseDateInput('2024-13-01 00:00', 'UTC').ok).toBe(false);
     expect(parseDateInput('2024-02-30 00:00', 'UTC').ok).toBe(false);
-    expect(convert({ ...base, mode: 'date-to-timestamp', dateInput: '' }).error).toContain('Enter a date');
+    expect(convert({ ...base, mode: 'date-to-timestamp', dateInput: '' }).error).toContain(
+      'Enter a date'
+    );
   });
 
   it('accepts a date without time as midnight', () => {
@@ -242,7 +249,17 @@ describe('serialize / deserialize', () => {
     expect(timestampTool.deserialize(null).success).toBe(false);
     expect(timestampTool.deserialize('string').success).toBe(false);
     expect(timestampTool.deserialize({}).success).toBe(false);
-    expect(timestampTool.deserialize({ mode: 'bogus', timestampInput: '1', dateInput: '', timezone: 'UTC', liveNow: false, output: '', error: null }).success).toBe(false);
+    expect(
+      timestampTool.deserialize({
+        mode: 'bogus',
+        timestampInput: '1',
+        dateInput: '',
+        timezone: 'UTC',
+        liveNow: false,
+        output: '',
+        error: null,
+      }).success
+    ).toBe(false);
   });
 
   it('deserialization error path returns a message', () => {

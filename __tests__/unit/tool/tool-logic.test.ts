@@ -47,7 +47,9 @@ describe('shell deserialize (lenient)', () => {
   });
 
   it('rejects object with non-string fields', () => {
-    expect(shellTool.deserialize({ mode: 'x', timestampInput: 123, dateInput: '' }).success).toBe(false);
+    expect(shellTool.deserialize({ mode: 'x', timestampInput: 123, dateInput: '' }).success).toBe(
+      false
+    );
   });
 
   it('round-trips state through serialize/deserialize', () => {

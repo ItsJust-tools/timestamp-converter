@@ -44,7 +44,10 @@ export const shellTool: Tool<ToolState> = {
           };
         }
       }
-      return { success: false, error: 'Invalid data format: expected { mode, timestampInput, dateInput, ... }' };
+      return {
+        success: false,
+        error: 'Invalid data format: expected { mode, timestampInput, dateInput, ... }',
+      };
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Deserialization error';
       return { success: false, error: `Failed to deserialize state: ${message}` };

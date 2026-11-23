@@ -55,7 +55,10 @@ export const timestampTool: Tool<ToolState> = {
       if (isToolState(data)) {
         return { success: true, data: data };
       }
-      return { success: false, error: 'Invalid data format: expected valid timestamp converter state' };
+      return {
+        success: false,
+        error: 'Invalid data format: expected valid timestamp converter state',
+      };
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Deserialization error';
       return { success: false, error: `Failed to deserialize state: ${message}` };
@@ -83,7 +86,9 @@ export function normalizeTimestamp(raw: number): number {
  * Validate and parse a timestamp string.
  * Returns normalized milliseconds since epoch, or an error message.
  */
-export function parseTimestampInput(input: string): { ok: true; value: number } | { ok: false; error: string } {
+export function parseTimestampInput(
+  input: string
+): { ok: true; value: number } | { ok: false; error: string } {
   const trimmed = input.trim();
   if (!trimmed) {
     return { ok: false, error: 'Enter a timestamp to convert.' };
@@ -116,11 +121,19 @@ export function parseDateInput(
     return { ok: false, error: 'Enter a date and time to convert.' };
   }
   if (!/^\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}(?::\d{2})?)?$/.test(trimmed)) {
-    return { ok: false, error: 'Date must use the format YYYY-MM-DD HH:mm (YYYY-MM-DD is also accepted).' };
+    return {
+      ok: false,
+      error: 'Date must use the format YYYY-MM-DD HH:mm (YYYY-MM-DD is also accepted).',
+    };
   }
   const iso = trimmed.includes('T') ? trimmed.replace(' ', 'T') : trimmed;
   if (timezone === 'UTC') {
-    const utcDate = new Date(`${iso}${iso.length === 10 ? 'T00:00:00' : iso.length === 16 ? ':00Z' : 'Z'}`.replace(/T?$/, ''));
+    const utcDate = new Date(
+      `${iso}${iso.length === 10 ? 'T00:00:00' : iso.length === 16 ? ':00Z' : 'Z'}`.replace(
+        /T?$/,
+        ''
+      )
+    );
     const date = Number.isNaN(utcDate.getTime())
       ? new Date(`${iso.replace(/^[^T]*/, '')}`.length ? `${iso}:00Z` : '')
       : utcDate;
@@ -140,7 +153,10 @@ function parseComponents(
 ): { ok: true; value: number } | { ok: false; error: string } {
   const match = input.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2}))?)?$/);
   if (!match) {
-    return { ok: false, error: 'Date must use the format YYYY-MM-DD HH:mm (YYYY-MM-DD is also accepted).' };
+    return {
+      ok: false,
+      error: 'Date must use the format YYYY-MM-DD HH:mm (YYYY-MM-DD is also accepted).',
+    };
   }
   const year = Number(match[1]);
   const month = Number(match[2]);
@@ -149,12 +165,22 @@ function parseComponents(
   const minute = Number(match[5] ?? '0');
   const second = Number(match[6] ?? '0');
   if (month < 1 || month > 12 || day < 1 || day > 31 || hour > 23 || minute > 59 || second > 59) {
-    return { ok: false, error: 'That date or time does not exist. Check month, day, and time values.' };
+    return {
+      ok: false,
+      error: 'That date or time does not exist. Check month, day, and time values.',
+    };
   }
   const naive = Date.UTC(year, month - 1, day, hour, minute, second);
   const date = new Date(naive);
-  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
-    return { ok: false, error: 'That date or time does not exist. Check month, day, and time values.' };
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return {
+      ok: false,
+      error: 'That date or time does not exist. Check month, day, and time values.',
+    };
   }
   if (timezone === 'UTC' || timezone === 'local') {
     const offsetMs = timezone === 'UTC' ? 0 : localOffsetMs(naive);
@@ -214,7 +240,14 @@ function formatOffsetMs(instantMs: number, timezone: string): number | null {
     });
     const parts = dtf.formatToParts(new Date(instantMs));
     const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
-    const asUtc = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour') % 24, get('minute'), get('second'));
+    const asUtc = Date.UTC(
+      get('year'),
+      get('month') - 1,
+      get('day'),
+      get('hour') % 24,
+      get('minute'),
+      get('second')
+    );
     return asUtc - Math.floor(instantMs / 1000) * 1000;
   } catch {
     return null;
@@ -237,7 +270,8 @@ export function formatInZone(
   zone: 'local' | 'UTC' | string = 'UTC'
 ): string {
   const resolved = zone === 'local' && timezone !== 'local' ? timezone : zone;
-  const tzOption = resolved === 'local' ? undefined : { timeZone: resolved === 'UTC' ? 'UTC' : resolved };
+  const tzOption =
+    resolved === 'local' ? undefined : { timeZone: resolved === 'UTC' ? 'UTC' : resolved };
   const d = new Date(ms);
   const datePart = new Intl.DateTimeFormat('en-CA', {
     ...tzOption,

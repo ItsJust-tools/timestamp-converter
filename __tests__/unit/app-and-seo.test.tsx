@@ -92,7 +92,9 @@ describe('app and seo', () => {
   it('covers tool definition and helper exports', async () => {
     expect(cn('a', undefined, 'b', false, null, 'c')).toBe('a b c');
     expect(getPublicSiteUrl()).toBe('http://localhost:3000');
-    expect(shellTool.deserialize({ mode: 'timestamp-to-date', timestampInput: 'x', dateInput: '' })).toEqual({
+    expect(
+      shellTool.deserialize({ mode: 'timestamp-to-date', timestampInput: 'x', dateInput: '' })
+    ).toEqual({
       success: true,
       data: {
         mode: 'timestamp-to-date',
@@ -108,8 +110,16 @@ describe('app and seo', () => {
       success: false,
       error: 'Invalid data format: expected { mode, timestampInput, dateInput, ... }',
     });
-    expect(shellTool.serialize({ ...shellTool.initialState, timestampInput: 'x' })).toContain('"timestampInput":"x"');
-    expect(shellTool.deserialize({ mode: 'date-to-timestamp', timestampInput: '1', dateInput: '2024-01-01 10:00' })).toEqual({
+    expect(shellTool.serialize({ ...shellTool.initialState, timestampInput: 'x' })).toContain(
+      '"timestampInput":"x"'
+    );
+    expect(
+      shellTool.deserialize({
+        mode: 'date-to-timestamp',
+        timestampInput: '1',
+        dateInput: '2024-01-01 10:00',
+      })
+    ).toEqual({
       success: true,
       data: {
         mode: 'date-to-timestamp',
@@ -121,7 +131,8 @@ describe('app and seo', () => {
         error: null,
       },
     });
-    const exporters = (shellTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
+    const exporters =
+      (shellTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
     expect(exporters).toHaveLength(4);
     const first = exporters[0];
     expect(first).toBeDefined();

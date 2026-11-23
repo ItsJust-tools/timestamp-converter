@@ -112,17 +112,26 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange }) => {
       </div>
 
       {state.liveNow ? (
-        <div className="rounded-md border border-indigo-300 dark:border-indigo-700 p-4" data-testid="live-now-panel">
-          <div className="text-xs uppercase tracking-wider text-gray-500">Current Unix timestamp</div>
+        <div
+          className="rounded-md border border-indigo-300 dark:border-indigo-700 p-4"
+          data-testid="live-now-panel"
+        >
+          <div className="text-xs uppercase tracking-wider text-gray-500">
+            Current Unix timestamp
+          </div>
           <div className="text-3xl font-mono font-semibold">{seconds}</div>
-          <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">{view.output.split('—')[1]}</div>
+          <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            {view.output.split('—')[1]}
+          </div>
           <div className="mt-2">
             <CopyButton value={String(seconds)} />
           </div>
         </div>
       ) : state.mode === 'timestamp-to-date' ? (
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wider mb-1">Unix timestamp</label>
+          <label className="block text-xs font-medium uppercase tracking-wider mb-1">
+            Unix timestamp
+          </label>
           <input
             type="text"
             data-testid="timestamp-input"
@@ -132,7 +141,9 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange }) => {
             className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <div className="mt-3">
-            <label className="block text-xs font-medium uppercase tracking-wider mb-1">Result</label>
+            <label className="block text-xs font-medium uppercase tracking-wider mb-1">
+              Result
+            </label>
             <div className="flex items-center justify-between gap-2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-3">
               <span className="font-mono text-sm" data-testid="timestamp-output">
                 {view.output || '—'}
@@ -143,7 +154,9 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange }) => {
         </div>
       ) : (
         <div>
-          <label className="block text-xs font-medium uppercase tracking-wider mb-1">Date and time</label>
+          <label className="block text-xs font-medium uppercase tracking-wider mb-1">
+            Date and time
+          </label>
           <input
             type="text"
             data-testid="date-input"
@@ -153,7 +166,9 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange }) => {
             className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <div className="mt-3">
-            <label className="block text-xs font-medium uppercase tracking-wider mb-1">Result</label>
+            <label className="block text-xs font-medium uppercase tracking-wider mb-1">
+              Result
+            </label>
             <div className="flex items-center justify-between gap-2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-3">
               <span className="font-mono text-sm" data-testid="date-output">
                 {view.output || '—'}

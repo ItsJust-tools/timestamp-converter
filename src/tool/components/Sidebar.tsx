@@ -10,7 +10,10 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ state, onChange }) => {
   return (
-    <div className="p-4 space-y-6 text-sm border-r h-full overflow-y-auto" data-testid="timestamp-sidebar">
+    <div
+      className="p-4 space-y-6 text-sm border-r h-full overflow-y-auto"
+      data-testid="timestamp-sidebar"
+    >
       <div>
         <h3 className="font-medium mb-2">Format</h3>
         <label className="flex items-center justify-between text-xs">
